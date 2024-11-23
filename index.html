@@ -19,9 +19,11 @@
         width: 350px;
         background: #fff;
         padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 8px rgba(101, 187, 168, 0.5);
         border-radius: 8px;
         position: relative;
+        /* background-color: #0056b3; */
+        padding-right: 40px;
       }
 
       .form-container h2 {
@@ -33,6 +35,7 @@
       .input-group {
         margin-bottom: 15px;
       }
+     
 
       .input-group label {
         display: block;
@@ -52,7 +55,7 @@
       .btn {
         width: 100%;
         padding: 10px;
-        background: #007bff;
+        background: #44cb9d;
         color: #fff;
         border: none;
         border-radius: 4px;
@@ -83,13 +86,46 @@
       #login-section {
         display: none;
       }
+      .loadercontainer{
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        display: none;
+    }
+    .loader {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f3f3f3; 
+      border-top: 5px solid #44cb9d;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    
+
+    }
+
+    /* Keyframes for spinning animation */
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
     </style>
   </head>
   <body>
+    <div class="loadercontainer">
+
+        <div class="loader"></div>
+    </div>
     <div class="form-container">
       <!-- Signup Form -->
       <div id="signup-section">
-        <h2>Sign Up</h2>
+        <h2 >Sign Up</h2>
         <form id="signup-form">
           <div class="input-group">
             <label for="signup-name">Name</label>
@@ -138,7 +174,7 @@
         createUserWithEmailAndPassword,
         signInWithEmailAndPassword,
       } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-
+    
       // Firebase configuration
       const firebaseConfig = {
         apiKey: "AIzaSyB-LfiB-8xrgpo8tG5eg1LouwzBoWYUsTo",
@@ -148,34 +184,36 @@
         messagingSenderId: "1073299859598",
         appId: "1:1073299859598:web:ab06d9a5bf7364985c41df",
       };
-
+    
       // Initialize Firebase
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
-
+    
       // Toggle Forms
       const showLogin = document.getElementById("show-login");
       const showSignup = document.getElementById("show-signup");
       const signupSection = document.getElementById("signup-section");
       const loginSection = document.getElementById("login-section");
-
+      const formContainer = document.querySelector(".form-container");
+      const loaderContainer = document.querySelector(".loadercontainer");
+    
       showLogin.addEventListener("click", () => {
         signupSection.style.display = "none";
         loginSection.style.display = "block";
       });
-
+    
       showSignup.addEventListener("click", () => {
         loginSection.style.display = "none";
         signupSection.style.display = "block";
       });
-
+    
       // Signup Form Submission
       const signupForm = document.getElementById("signup-form");
       signupForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const email = document.getElementById("signup-email").value;
         const password = document.getElementById("signup-password").value;
-
+    
         createUserWithEmailAndPassword(auth, email, password)
           .then(() => {
             alert("Signup successful! Redirecting to login...");
@@ -186,23 +224,31 @@
             alert("Error: " + error.message);
           });
       });
-
+    
       // Login Form Submission
       const loginForm = document.getElementById("login-form");
       loginForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const email = document.getElementById("login-email").value;
         const password = document.getElementById("login-password").value;
-
+    
         signInWithEmailAndPassword(auth, email, password)
           .then(() => {
-            alert("Login successful!");
-            window.location.href = "screenwise.html";
+            // Hide the form container and show the loader
+            formContainer.style.display = "none";
+            loaderContainer.style.display = "flex";
+    
+            // Simulate delay for loader before navigating
+            setTimeout(() => {
+              // Redirect to the main page
+              window.location.href = "screenwise.html";
+            }, 2000); // Loader duration (2 seconds)
           })
           .catch(() => {
             alert("Wrong Email/Password");
           });
       });
     </script>
+    
   </body>
 </html>
